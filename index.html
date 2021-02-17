@@ -59,8 +59,8 @@
 			//Ajout d'arteres principales
 			arteres = new L.GeoJSON.AJAX('data/arteres_3.geojson', {
 				style: {
-					weight: 1,
-					opacity: 2,
+					weight: 2,
+					opacity: 1,
 					color: 'red',
 					dashArray: '3'
 				},
@@ -68,7 +68,7 @@
 
 				var text = "";
 				if (feature.properties.NOM_VOIE){
-					text += "<p><b>Boulevard " + feature.properties.NOM_VOIE + "</b></p>";
+					text += "<p><h2>Boulevard " + feature.properties.NOM_VOIE + "</h2></p>";
 				} if (feature.properties.description){
 					text += feature.properties.description
 				}
