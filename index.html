@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Un titre</title>
+		<meta charset="UTF-8">
+		<!-- Téléchargement de la bibliothèque Leaflet.js -->
+		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+		<!-- Téléchargement des instructions CSS de Leaflet, qui serviront à styliser les éléments de l'interface de la carte -->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
+		
+		<style>
+			html, body {height: 100%; margin: 0;}
+			#Carte { width: 100%; height: 100%; }
+		</style>
+	</head>
+	<body>
+<!--		Création d'un <div> qui contiendra notre carte-->
+        <div id='Carte'></div>
+        
+        <script>
+            //Création d'une variable "maCarte" qui contiendra... ma carte.
+            maCarte = L.map('Carte')
+            //On donne une position lat lng et un niveau de zoom par défaut
+            maCarte.setView([45,-73], 5)
+            //On définit notre fond de carte qui téléchargera les tuiles avec l'API OSM
+            fondDeCarte = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png')
+            //J'attache ce fond de plan à ma carte
+            fondDeCarte.addTo(maCarte)
+
+            //Création d'un marker et d'un pop-up
+			UnPoint = L.marker([45.2,-73.5])
+			UnPoint.bindPopup('<h1>Point<h1>')
+			UnPoint.addTo(maCarte)
+
+            //Création d'un cercle et d'un pop-up
+			UnCercle = L.circle([45.2,-73.5], {color: 'red', fillColor: 'blue', fillOpacity: 0.5, radius: 5000})
+			UnCercle.bindPopup('<h1>Cercle<h1>')
+			UnCercle.addTo(maCarte);
+
+            //Création d'un cercle et d'un pop-up
+			UnPolygone = L.polygon([[45.2,-73.5],[15.2,73.5],[0.2,-0.5]])
+			UnPolygone.bindPopup('<h1>Polygone<h1>')
+			UnPolygone.addTo(maCarte);
+        </script>
+
+	</body>
+</html>
