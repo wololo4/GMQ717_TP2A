@@ -26,6 +26,17 @@
             fondDeCarte = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png')
             //J'attache ce fond de plan à ma carte
             fondDeCarte.addTo(maCarte)
+            
+            couche = new L.GeoJSON.AJAX('data/parcs.geojson', {
+				style: {
+					weight: .5,
+					opacity: .5,
+					color: 'white',
+					dashArray: '3',
+					fillOpacity: 0.9,
+					fillColor: 'grey'
+				}
+			})
 
             //Création d'un marker et d'un pop-up
 			UnPoint = L.marker([45.2,-73.5])
