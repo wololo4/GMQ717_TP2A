@@ -57,17 +57,20 @@
 			ahuntsic.addTo(maCarte)
 
 			//Ajout d'arteres principales
-			arteres = new L.GeoJSON.AJAX('data/arteres_2.geojson', {
+			arteres = new L.GeoJSON.AJAX('data/arteres_3.geojson', {
 				style: {
-					weight: 10,
-					opacity: 1,
-					color: 'black'
+					weight: 1,
+					opacity: 2,
+					color: 'red',
+					dashArray: '3'
 				},
 				onEachFeature: function( feature, layer ){
 
 				var text = "";
 				if (feature.properties.NOM_VOIE){
-					text += feature.properties.NOM_VOIE;
+					text += "<p><b>Boulevard " + feature.properties.NOM_VOIE + "</b></p>";
+				} if (feature.properties.description){
+					text += feature.properties.description
 				}
 				layer.bindPopup(text);
 
