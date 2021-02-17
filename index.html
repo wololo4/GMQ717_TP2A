@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Un titre</title>
+		<title>Carte des parcs et sites d'intérêts de l'arrondissement d'Ahuntsic-Cartierville</title>
 		<meta charset="UTF-8">
 		<!-- Téléchargement de la bibliothèque Leaflet.js -->
 		<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 <!--		Importation du plugin Leaflet.ajax-->
-		<script src='plugins/leaflet.ajax.min.js'></script>
+		<script src='extension/dist/leaflet.ajax.min.js'></script>
 		<!-- Téléchargement des instructions CSS de Leaflet, qui serviront à styliser les éléments de l'interface de la carte -->
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" />
 		
@@ -25,27 +25,115 @@
 //			Création d'une variable "maCarte" qui contiendra... ma carte.
 			maCarte = L.map('Carte')
 //			On donne une position lat lng et un niveau de zoom par défaut
-			maCarte.setView([45.5,-73.5], 10)
+			maCarte.setView([45.5534,-73.6657], 12)
 //			On définit notre fond de carte qui téléchargera les tuiles avec l'API Mapbox, vous devez d'abord aller chercher "VOTRE_CLÉ" sur https://account.mapbox.com
- 			fondDeCarte = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=VOTRE_CLÉ')
+			fondDeCarte = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png')
 //			J'attache ce fond de plan à ma carte
 			fondDeCarte.addTo(maCarte)
 			
 //			Ajout de la référence pour les données
 			maCarte.attributionControl.addAttribution('Fond de plan OSM & MapBox. Données &copy; <a href="http://statisticscanada.ca/">Statistiques Canada</a>');
 			
-//			Utilisation du plugin Leaflet.ajax pour importer un fichier json externe de manière asynchrone
-			couche = new L.GeoJSON.AJAX('data/Montreal_v0743.geojson', {
+			//Ajout de la limite de l'arrondissement
+			ahuntsic = new L.GeoJSON.AJAX('data/Ahuntsic-Cartierville.geojson', {
+				style: {
+					weight: 2,
+					opacity: 1,
+					color: 'black',
+					dashArray: '10',
+					fillOpacity: 0.0,
+					fillColor: 'white'
+				},
+				onEachFeature: function( feature, layer ){
+
+				var text = "";
+				if (feature.properties.NOM){
+					text += "<p>Limite de l'arrondissement d'Ahuntsic-Cartierville</p>"
+				}
+				layer.bindPopup(text);
+
+				} 
+			})
+			ahuntsic.addTo(maCarte)
+
+			//Ajout d'arteres principales
+			arteres = new L.GeoJSON.AJAX('data/arteres.geojson', {
+				style: {
+					weight: 10,
+					opacity: 1,
+					color: 'black'
+				},
+				onEachFeature: function( feature, layer ){
+
+				var text = "";
+
+				if (feature.properties.NOM_VOIE){
+					text += feature.properties.NOM_VOIE;
+				}
+				layer.bindPopup(text);
+
+				} 	
+			})
+			arteres.addTo(maCarte)
+			
+
+			//Ajout des sites d'interets
+			site = new L.GeoJSON.AJAX('data/sites.geojson', {
 				style: {
 					weight: .5,
 					opacity: .5,
-					color: 'white',
+					color: 'blue',
 					dashArray: '3',
 					fillOpacity: 0.9,
-					fillColor: 'grey'
+					fillColor: 'teal'
+				},
+				onEachFeature: function( feature, layer ){
+
+				var text = "";
+
+				if (feature.properties.name) {
+					text += "<h2><b>" + feature.properties.name + "</b></h2></br> "; 
+				}if (feature.properties.description) {
+					text += feature.properties.description +"</br></br> "; 
+				}if (feature.properties.source){
+					text += "<a href="+feature.properties.source+">Source</a></br></br>";
+				}if (feature.properties.image){
+					text += "<img src="+feature.properties.image+" style='width:300px;height:250px;''>"
 				}
+				layer.bindPopup(text);
+
+				} 	
+			}).addTo(maCarte)
+
+
+//			Ajout des parcs
+			parcs = new L.GeoJSON.AJAX('data/parcs.geojson', {
+				style: {
+					weight: .5,
+					opacity: .5,
+					color: 'forest',
+					dashArray: '3',
+					fillOpacity: 0.9,
+					fillColor: 'green'
+				},
+				onEachFeature: function( feature, layer ){
+
+				var text = "";
+
+				if (feature.properties.name) {
+					text += "<h2><b>" + feature.properties.name + "</b></h2></br> "; 
+				}if (feature.properties.description) {
+					text += feature.properties.description +"</br></br> "; 
+				}if (feature.properties.source){
+					text += "<a href="+feature.properties.source+">Source</a></br></br>";
+				}if (feature.properties.image){
+					text += "<img src="+feature.properties.image+" style='width:300px;height:250px;''>"
+				}
+				layer.bindPopup(text);
+
+				} 
 			})
-			couche.addTo(maCarte)
+			parcs.addTo(maCarte)
 			
 		</script>
 	</body>
